@@ -45,7 +45,7 @@ jobs:
         run: trivy image --scanners vuln ${{ secrets.ECR_REPOSITORY }}:latest || echo "Trivy scan skipped if image not present"
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.ECR_REPOSITORY }}:latest .
+        run: docker buildx build --platform linux/amd64 -t ${{ secrets.ECR_REPOSITORY }}:latest .
 
       - name: Authenticate with Amazon ECR
         run: |
