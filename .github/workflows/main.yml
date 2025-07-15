@@ -1,60 +1,45 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [main]
+push:
+branches: [main]
 
 jobs:
-  build:
-    runs-on: self-hosted
+build:
+runs-on: self-hosted
 
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+steps:
+- name: Checkout source code
+uses: actions/checkout@v4
 
-      - name: Verify Node.js installation
-        run: node -v
+- name: Verify Node.js installation
+run: node -v
 
-      - name: Install dependencies
-        run: |
-          cd app
-          npm install
+- name: Install dependencies
+run: |
+cd app
+npm install
 
-      - name: Run application tests
-        run: |
-          cd app
-          npm test
+- name: Run application tests
+run: |
+cd app
+npm test
 
-      - name: SonarQube Scan
-        run: |
-          /opt/sonar-scanner/bin/sonar-scanner \
-            -Dsonar.projectKey=eks-ci-cd-demo \
-            -Dsonar.sources=./app \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+- name: Debug token presence
+run: echo "Token is set"
+env:
+SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Trivy Scan
-        run: trivy image ${{ secrets.ECR_REPOSITORY }}:latest || echo "Trivy scan skipped if image not present"
+- name: SonarQube Scan
+run: |
+/opt/sonar-scanner/bin/sonar-scanner \
+-Dsonar.projectKey=eks-ci-cd-demo \
+-Dsonar.sources=./app \
+-Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+-Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.ECR_REPOSITORY }}:latest .
+- name: Trivy Scan
+run: trivy image ${{ secrets.ECR_REPOSITORY }}:latest || echo "Trivy scan skipped if image not present"
 
-      - name: Authenticate with Amazon ECR
-        run: |
-          aws ecr get-login-password --region ap-south-1 |
-          docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
-
-      - name: Push Docker image to ECR
-        run: docker push ${{ secrets.ECR_REPOSITORY }}:latest
-
-      - name: Configure kubectl for EKS
-        run: aws eks update-kubeconfig --region ap-south-1 --name eks-ci-cd-cluster
-
-      - name: Deploy to EKS
-        run: kubectl apply -f deployment.yaml
-
-      - name: Terraform Provisioning (Optional)
-        run: |
-          cd terraform
-          terraform init
-          terraform apply -auto-approve
+- name: Build Docker image
+run: docker build -t ${{ secrets.ECR_REPOSITORY }}
