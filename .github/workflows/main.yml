@@ -47,6 +47,9 @@ jobs:
         run: pwd
       - name: List files
         run: ls -la
+      - name: Confirm Dockerfile location
+        run: ls -la ${{ github.workspace }}/Dockerfile
+
 
       - name: Build Docker image
         working-directory: ${{ github.workspace }}
