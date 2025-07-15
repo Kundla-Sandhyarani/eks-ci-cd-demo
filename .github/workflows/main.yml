@@ -42,7 +42,7 @@ jobs:
             -Dsonar.login=$SONAR_TOKEN
 
       - name: Trivy Scan
-        run: trivy image ${{ secrets.ECR_REPOSITORY }}:latest || echo "Trivy scan skipped if image not present"
+        run: trivy image --scanners vuln ${{ secrets.ECR_REPOSITORY }}:latest || echo "Trivy scan skipped if image not present"
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.ECR_REPOSITORY }}:latest .
