@@ -31,12 +31,15 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           /opt/sonar-scanner/bin/sonar-scanner \
             -Dsonar.projectKey=eks-ci-cd-demo \
             -Dsonar.sources=./app \
-            -Dsonar.host.url=http://3.25.60.204:9000 \
-            -Dsonar.login=squ_45562d671f97803a72aca1ead78fc3efbafedab7
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN
 
       - name: Trivy Scan
         run: trivy image ${{ secrets.ECR_REPOSITORY }}:latest || echo "Trivy scan skipped if image not present"
