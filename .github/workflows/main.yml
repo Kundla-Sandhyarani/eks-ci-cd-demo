@@ -53,7 +53,7 @@ jobs:
 
       - name: Build Docker image
         working-directory: ${{ github.workspace }}
-        run: docker buildx build --platform linux/amd64 -t ${{ secrets.ECR_REPOSITORY }}:latest .
+        run: docker buildx build -t ${{ secrets.ECR_REPOSITORY }}:latest .
 
       - name: Authenticate with Amazon ECR
         run: |
