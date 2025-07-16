@@ -58,7 +58,8 @@ jobs:
       - name: Build Docker image
         env:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: docker build -t "$ECR_REPOSITORY:latest" .
+        run: docker build -t "$ECR_REPOSITORY:latest" /home/ec2-user/actions-runner/_work/ec2-demo/ec2-demo
+
 
       - name: Authenticate with Amazon ECR
         run: |
