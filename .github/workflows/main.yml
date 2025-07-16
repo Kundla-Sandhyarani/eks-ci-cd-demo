@@ -49,6 +49,10 @@ jobs:
         run: ls -la
       - name: Confirm Dockerfile location
         run: ls -la ${{ github.workspace }}/Dockerfile
+      - name: Debug ECR_REPOSITORY
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        run: echo "ECR_REPOSITORY is:$ECR_REPOSITORY"
 
 
       - name: Build Docker image
