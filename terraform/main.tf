@@ -9,8 +9,9 @@ module "eks" {
   vpc_id          = "vpc-0121b1a9ddb0ffbfe"
 
   # Add these lines ↓↓↓
-  cloudwatch_log_group_name     = "/aws/eks/amazing-hiphop-wardrobe/cluster"
-  create_cloudwatch_log_group   = false
+  create_cloudwatch_log_group = false
+  cloudwatch_log_group_name   = "/aws/eks/amazing-hiphop-wardrobe/cluster"  # optional, for tagging/log reference
+}
 
   # Optional: other config
   enable_irsa   = true
