@@ -25,7 +25,7 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
   create_cloudwatch_log_group = false
 
-  node_groups = {
+  eks_managed_node_groups = {
     default = {
       desired_size   = 1
       max_size       = 2
