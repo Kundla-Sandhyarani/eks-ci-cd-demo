@@ -53,12 +53,19 @@ jobs:
         env:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: echo "ECR_REPOSITORY is:$ECR_REPOSITORY"
-
-
       - name: Build Docker image
         env:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: docker build -t "$ECR_REPOSITORY:latest" /home/ec2-user/actions-runner/_work/ec2-demo/ec2-demo
+        run: |
+          CLEAN_REPO=$(echo "$ECR_REPOSITORY" | tr -d '\n' | tr -d '\r')
+          docker build -t "$CLEAN_REPO:latest" .
+
+
+
+      # - name: Build Docker image
+      #   env:
+      #     ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      #   run: docker build -t "$ECR_REPOSITORY:latest" /home/ec2-user/actions-runner/_work/ec2-demo/ec2-demo
 
 
       - name: Authenticate with Amazon ECR
