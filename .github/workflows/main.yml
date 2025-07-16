@@ -52,8 +52,9 @@ jobs:
 
 
       - name: Build Docker image
-        working-directory: ${{ github.workspace }}
-        run: docker build -t ${{ secrets.ECR_REPOSITORY }}:latest .
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        run: docker build -t "$ECR_REPOSITORY:latest" .
 
       - name: Authenticate with Amazon ECR
         run: |
