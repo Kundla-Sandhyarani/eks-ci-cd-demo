@@ -17,7 +17,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.37.1"
 
-  cluster_name    = "amazing-hiphop-wardrobe-v2"
+  cluster_name    = "sandhya-amazing-hiphop-wardrobe"
   cluster_version = "1.33"
   vpc_id          = "vpc-0121b1a9ddb0ffbfe"
   subnet_ids      = ["subnet-0c980a59bca3f2bc9", "subnet-038b4cd5e678d4ae9"]
